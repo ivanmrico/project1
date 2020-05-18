@@ -13,6 +13,7 @@ import mod.PassageType;
 
 public class Frame {
 
+	// INSTANCE VARIABLES
 	private JFrame _frame;
 	private JPanel _pan;
 	private JLabel[][] _mazegui;
@@ -21,34 +22,18 @@ public class Frame {
 	private int _plyRow, _plyCol;
 	private Maze _maze;
 
-	public int getPlayerRow() {
-		return _plyRow;
-	}
+	// GETTERS
+	public int getPlayerRow() { return _plyRow;	}
+	public int getPlayerCol() {	return _plyCol;	}
+	public JFrame getFrame() {	return _frame;	}
+	public JLabel[][] getMazeGUI() { return _mazegui; }
+	public Maze getMaze() {	return _maze;	}
 
-	public int getPlayerCol() {
-		return _plyCol;
-	}
+	//SETTERS
+	public void setPlayerRow(int row) {	_plyRow = row;	}
+	public void setPlayerCol(int col) {	_plyCol = col;	}
 
-	public JFrame getFrame() {
-		return _frame;
-	}
-
-	public JLabel[][] getMazeGUI() {
-		return _mazegui;
-	}
-
-	public Maze getMaze() {
-		return _maze;
-	}
-
-	public void setPlayerRow(int row) {
-		_plyRow = row;
-	}
-
-	public void setPlayerCol(int col) {
-		_plyCol = col;
-	}
-
+	// CONSTRUCTOR
 	public Frame(Maze m) {
 		_maze = m;
 		_icons = getIconArray(_maze.getMaze());
@@ -57,6 +42,10 @@ public class Frame {
 		setupFrame();
 	}
 
+	/*
+	 * This method sets up the frame. It does not allow for resizing, let's you exit the program
+	 * upon closing and adds a key listener to the frame.
+	 */
 	private void setupFrame() {
 		_frame = new JFrame("MiniMap");
 		_frame.add(_pan);
@@ -68,6 +57,9 @@ public class Frame {
 		_frame.setVisible(true);
 	}
 
+	/*
+	 * This method sets up the player in the gui and adds them to the frame.
+	 */
 	private void setupPlayer() {
 		_plyRow = _icons.length - 1;
 		_plyCol = 1;
@@ -78,6 +70,10 @@ public class Frame {
 
 	}
 
+	/*
+	 * This method adds the player to the space they moved to. It does this by reconstructing the player's
+	 * JLabel and adding it to the frame.
+	 */
 	public void addPlayer(int r, int c, Direction d) {
 		_ply = new JLabel(new ImageIcon(getClass().getResource(d.getFileName())));
 		_ply.setSize(_mazegui[r][c].getSize());
@@ -89,6 +85,9 @@ public class Frame {
 		_frame.repaint();
 	}
 
+	/*
+	 * This method removes the player from the JFrame. It is used after the player moves.
+	 */
 	public void removePlayer(int r, int c) {
 		_mazegui[r][c].remove(_ply);
 		_mazegui[r][c].repaint();
@@ -97,6 +96,11 @@ public class Frame {
 
 	}
 
+	/*
+	 * This method sets up a panel to hold all of the JLabels needed to draw the maze and the player.
+	 * It then adds all the JLabels that represent the maze into the panel. The size of the panel scales 
+	 * based on the size of the maze.
+	 */
 	private void setupPanel() {
 		_pan = new JPanel();
 		_pan.setLayout(new GridLayout(_icons.length, _icons[0].length));
@@ -106,6 +110,11 @@ public class Frame {
 
 	}
 
+	/*
+	 * This method sets up the labels that will represent the maze. It takes the images for the
+	 * JLabels from an Icon array that graphically represents the maze. It also creates the player
+	 * JLabel for later use. The size of the JLabel array scales with the size of the maze.
+	 */
 	private void setupLabels() {
 		_mazegui = new JLabel[_icons.length][_icons[0].length];
 		_ply = new JLabel(new ImageIcon(getClass().getResource("arrowUp.png")));
@@ -118,6 +127,11 @@ public class Frame {
 		}
 	}
 
+	/*
+	 * This method creates the Images to be added to the JLabels. It will either create a movable spot
+	 * or an immovable spot depending on what the maze requires. It will automatically scale to the size
+	 * of the maze.
+	 */
 	public ImageIcon[][] getIconArray(boolean[][] maze) {
 		int rows = maze.length;
 		int cols = maze[0].length;
